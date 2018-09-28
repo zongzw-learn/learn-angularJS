@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!--this is another place to place script.-->
+        <script></script>
+
+        <!--A sample to define css styles-->
+        <style>
+            panel {
+                font-family: monaco;
+                font-size: 20px;
+            }
+        </style>
+    </head>
+
+    <body ng-app="myApp">
+        <!--'as ctrl' would trigger the controller constructor, and make the instance 'ctrl'. 
+            only in this way can controller's function become accessible, i.e. ctrl.calNameBase64().-->
+        <div ng-controller="myCtrl as ctrl">
+            <br>
+            <font size="5">Input your string: </font>
+            <input ng-model="myString" ng-change="ctrl.calStringBase64()">
+            <br><br>
+            <panel>
+                upper &nbsp&nbsp : {{myString | uppercase }} <br> <!--The way to use filter in html-->
+                lower &nbsp&nbsp : {{lowerString()}} <br>
+                base64  &nbsp : {{ctrl.calStringBase64()}}<br>
+            </panel>
+            <br>
+
+            <div ng-style="signedHash">
+            md5&nbsp&nbsp&nbsp : {{calStringMd5()}} <br> 
+            sha1&nbsp&nbsp : {{calStringSha1()}} <br>
+            </div>
+        </div>
+
+        <!--to trigger injector.instantiate(inlineArrayInjectionCtrl)-->
+        <div ng-controller="inlineArrayInjectionCtrl"></div>
+
+        <!--Place the script here at the end of body to accelerate loading speed, 
+            but will cause instant {{variable}} flash.
+            Move <script>s to <head> would fix it, but would delay the page loading.-->
+        <script src="https://code.angularjs.org/1.4.6/angular.min.js"></script>
+
+        <script src="../encryption/md5.js"></script>
+        <script src="../encryption/base64.js"></script>
+        <script src="../encryption/sha1.js"></script>
+    
+        <script>
+            var app = angular.module("myApp", ['angular-md5', 'angular-sha1']);  // inject other module in the [] 
+
+            // define service via service()
+            app.service("hashService", function() {
+                this.md5 = function(x) {
+                    return "md5(" + x + ")";
+                };
+                this.base64 = function(x) {
+                    // new an instance of service Base64. It's defined within the same module by default.
+                    return new Base64().encode(x);
+                };
+            });
+
+            // define controller with injecting dependencies implicitly from function parameters[not recommended]
+            // the parameters' name must be as same as the service's name.
+            app.controller("myCtrl", function($scope, $filter, hashService, md5, sha1) { // inject services. 
+                $scope.myString = '';
+
+                // the way to use filter in controller.
+                $scope.lowerString = function() {
+                    return $filter('lowercase')($scope.myString);  // the $filter service usage.
+                };
+
+                // function is defined
+                $scope.calStringMd5 = function() {
+                    //return hashService.md5($scope.myString);
+                    return md5.createHash($scope.myString);
+                };
+
+                // the name ctrl must be as same as 'ng-controller="myCtrl as ctrl"'. 
+                var ctrl = this;
+                // function is defined on controller object.
+                // It's rare to use this way to define function, 
+                // instead, $scope.<function> is preferred.
+                ctrl.calStringBase64 = function() {
+                    return hashService.base64($scope.myString);
+                };
+
+                $scope.calStringSha1 = function() {
+                    return sha1.hash($scope.myString);
+                }
+
+                // the way to define ng-style
+                $scope.signedHash = {
+                    'color': 'green',
+                    'font-family': 'courier new',
+                    'font-size': '25px',
+                    'padding': '5px'
+                }
+            });
+
+            // define controller with inline array annotation.
+            // the parameters' name can differ from services' names which have been injected inline. 
+            app.controller("inlineArrayInjectionCtrl", ['$scope', '$filter', 'md5', 'sha1', 
+                function($scope, $filter, md5Service, sha1Service) {
+                    console.log("md5('data'): " + md5Service.createHash('data'));
+                    console.log("sha1('data') uppercase: " + $filter('uppercase')(sha1Service.hash('data')));
+            }]);
+
+            // define controller with $inject
+            app.controller('injectPropertyCtrl', injectPropertyCtrl);
+            injectPropertyCtrl.$inject = [
+                '$scope', '$filter', 'md5', 'sha1'
+            ];
+        </script>
+    </body>
+</html>
+
+<!--
+    directive: ng-app ng-controller ng-model
+    $scope
+    service
+    filter
+    event
+    angular.functions
+    input validation
+    batarang
+    controller 构造函数fangshi
+    customized directive
+    provide
+-->
