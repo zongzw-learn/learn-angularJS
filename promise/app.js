@@ -6,11 +6,11 @@ app.controller("Controller", ['$scope', '$filter', '$q', '$http',
         $q,
         $http
     ){
-        $scope.time = $filter('date')(new Date(), "MM-dd-HH-mm-ss")
+        $scope.time = $filter('date')(new Date(), "MM-dd-HH-mm-ss");
 
         $scope.test_no_promise = function() {
             noPromise1().then(noPromise2)
-        }
+        };
 
         // must be 1) return promise as future promise; 2) must resolve/reject to trigger successCallback / errorCallback.
         function noPromise1() {
@@ -34,6 +34,7 @@ app.controller("Controller", ['$scope', '$filter', '$q', '$http',
                 "http://localhost/",
                 "http://10.145.106.100:8080/",
                 "http://10.145.106.100/",
+                'http://foxfox.mychinabluemix.net/metamask.png'
             ]
       
             var promises = []
@@ -67,8 +68,8 @@ app.controller("Controller", ['$scope', '$filter', '$q', '$http',
             console.log("step 4 executed")
         }
         
-        //function onStep1OK(result) {
-        function onStep1OK() {
+        function onStep1OK(result) {
+        //function onStep1OK() {
 
             var deferred = $q.defer()
             var promise = deferred.promise
@@ -79,7 +80,8 @@ app.controller("Controller", ['$scope', '$filter', '$q', '$http',
             //deferred.resolve("result")
 
             //return promise
-            return "result"
+            //return "result"
+            return result
         }
         
 

@@ -11,7 +11,10 @@
             {{timeoutInfo}} <br><br>
             <br><br>
             <p style="text-align: Center;">
-                <img ng-src="http://foxfox.mychinabluemix.net/metamask.png"/>
+                <img ng-src="{{pngSource}}"
+                    ng-mouseenter="mouseEnterPng()"
+                    ng-mouseleave="mouseLeavePng()"/><br>
+                {{panelInfo}}
             </p>
         </div>
     </body>
