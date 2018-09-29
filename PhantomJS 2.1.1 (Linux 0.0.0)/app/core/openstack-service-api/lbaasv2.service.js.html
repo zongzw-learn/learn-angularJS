@@ -1,0 +1,1412 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for app/core/openstack-service-api/lbaasv2.service.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">all files</a> / <a href="index.html">app/core/openstack-service-api/</a> lbaasv2.service.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>81/81</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>14/14</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>46/46</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>81/81</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">72×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">72×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*
+ * Copyright 2015 IBM Corp.
+ *
+ * Licensed under the Apache License, Version 2.0 (the 'License');
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an 'AS IS' BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+(function () {
+  'use strict';
+&nbsp;
+  angular
+    .module('horizon.app.core.openstack-service-api')
+    .factory('horizon.app.core.openstack-service-api.lbaasv2', lbaasv2API);
+&nbsp;
+  lbaasv2API.$inject = [
+    'horizon.framework.util.http.service',
+    'horizon.framework.widgets.toast.service'
+  ];
+&nbsp;
+  /**
+   * @ngdoc service
+   * @name horizon.app.core.openstack-service-api.loadbalancers
+   * @description Provides direct pass through to neutron LBaaS v2 with NO abstraction.
+   * @param apiService The horizon core API service.
+   * @param toastService The horizon toast service.
+   * @returns The LBaaS V2 service API.
+   */
+&nbsp;
+  function lbaasv2API(apiService, toastService) {
+    var service = {
+      getLoadBalancers: getLoadBalancers,
+      getLoadBalancer: getLoadBalancer,
+      deleteLoadBalancer: deleteLoadBalancer,
+      createLoadBalancer: createLoadBalancer,
+      editLoadBalancer: editLoadBalancer,
+      getListeners: getListeners,
+      getListener: getListener,
+      createListener: createListener,
+      editListener: editListener,
+      deleteListener: deleteListener,
+      getPool: getPool,
+      createPool: createPool,
+      editPool: editPool,
+      deletePool: deletePool,
+      getMembers: getMembers,
+      getMember: getMember,
+      editMember: editMember,
+      getHealthMonitor: getHealthMonitor,
+      deleteHealthMonitor: deleteHealthMonitor,
+      createHealthMonitor: createHealthMonitor,
+      editHealthMonitor: editHealthMonitor,
+      updateMemberList: updateMemberList
+    };
+&nbsp;
+    return service;
+&nbsp;
+    ///////////////
+&nbsp;
+    // Load Balancers
+&nbsp;
+    /**
+     * @name horizon.app.core.openstack-service-api.lbaasv2.getLoadBalancers
+     * @description
+     * Get a list of load balancers.
+     * @param {boolean} full
+     * The listing result is an object with property "items". Each item is
+     * a load balancer.
+     */
+&nbsp;
+    function getLoadBalancers(full) {
+      var params = { full: full };
+      return apiService.get('/api/lbaas/loadbalancers/', { params: params })
+        .error(function () {
+          toastService.add('error', gettext('Unable to retrieve load balancers.'));
+        });
+    }
+&nbsp;
+    /**
+     * @name horizon.app.core.openstack-service-api.lbaasv2.getLoadBalancer
+     * @description
+     * Get a single load balancer by ID
+     * @param {string} id
+     * @param {boolean} full
+     * Specifies the id of the load balancer to request.
+     */
+&nbsp;
+    function getLoadBalancer(id, full) {
+      var params = { full: full };
+      return apiService.get('/api/lbaas/loadbalancers/' + id + '/', { params: params })
+        .error(function () {
+          toastService.add('error', gettext('Unable to retrieve load balancer.'));
+        });
+    }
+&nbsp;
+    /**
+     * @name horizon.app.core.openstack-service-api.lbaasv2.deleteLoadBalancer
+     * @description
+     * Delete a single load balancer by ID
+     * @param {string} id
+     * @param {boolean} quiet
+     * Specifies the id of the load balancer to delete.
+     */
+&nbsp;
+    function deleteLoadBalancer(id, quiet) {
+      var promise = apiService.delete('/api/lbaas/loadbalancers/' + id + '/');
+      return quiet ? promise : promise.error(function () {
+        toastService.add('error', gettext('Unable to delete load balancer.'));
+      });
+    }
+&nbsp;
+    /**
+     * @name horizon.app.core.openstack-service-api.lbaasv2.createLoadBalancer
+     * @description
+     * Create a new load balancer
+     * @param {object} spec
+     * Specifies the data used to create the new load balancer.
+     */
+&nbsp;
+    function createLoadBalancer(spec) {
+      return apiService.post('/api/lbaas/loadbalancers/', spec)
+        .error(function () {
+          toastService.add('error', gettext('Unable to create load balancer.'));
+        });
+    }
+&nbsp;
+    /**
+     * @name horizon.app.core.openstack-service-api.lbaasv2.editLoadBalancer
+     * @description
+     * Edit a load balancer
+     * @param {string} id
+     * @param {object} spec
+     * Specifies the data used to update the load balancer.
+     */
+&nbsp;
+    function editLoadBalancer(id, spec) {
+      return apiService.put('/api/lbaas/loadbalancers/' + id + '/', spec)
+        .error(function () {
+          toastService.add('error', gettext('Unable to update load balancer.'));
+        });
+    }
+&nbsp;
+    // Listeners
+&nbsp;
+    /**
+     * @name horizon.app.core.openstack-service-api.lbaasv2.getListeners
+     * @description
+     * Get the list of listeners.
+     * If a loadbalancer ID is passed as a parameter, the returning list of
+     * listeners will be filtered to include only those listeners under the
+     * specified loadbalancer.
+     * @param {string} id
+     * Specifies the id of the loadbalancer to request listeners for.
+     *
+     * The listing result is an object with property "items". Each item is
+     * a listener.
+     */
+&nbsp;
+    function getListeners(id) {
+      var params = id ? {params: {loadbalancerId: id}} : {};
+      return apiService.get('/api/lbaas/listeners/', params)
+        .error(function () {
+          toastService.add('error', gettext('Unable to retrieve listeners.'));
+        });
+    }
+&nbsp;
+    /**
+     * @name horizon.app.core.openstack-service-api.lbaasv2.getListener
+     * @description
+     * Get a single listener by ID.
+     * @param {string} id
+     * Specifies the id of the listener to request.
+     * @param {boolean} includeChildResources
+     * If truthy, all child resources below the listener will be included in the response.
+     */
+&nbsp;
+    function getListener(id, includeChildResources) {
+      var params = includeChildResources
+          ? {params: {includeChildResources: includeChildResources}}
+          : {};
+      return apiService.get('/api/lbaas/listeners/' + id + '/', params)
+        .error(function () {
+          toastService.add('error', gettext('Unable to retrieve listener.'));
+        });
+    }
+&nbsp;
+    /**
+     * @name horizon.app.core.openstack-service-api.lbaasv2.createListener
+     * @description
+     * Create a new listener
+     * @param {object} spec
+     * Specifies the data used to create the new listener.
+     */
+&nbsp;
+    function createListener(spec) {
+      return apiService.post('/api/lbaas/listeners/', spec)
+        .error(function () {
+          toastService.add('error', gettext('Unable to create listener.'));
+        });
+    }
+&nbsp;
+    /**
+     * @name horizon.app.core.openstack-service-api.lbaasv2.editListener
+     * @description
+     * Edit a listener
+     * @param {string} id
+     * Specifies the id of the listener to update.
+     * @param {object} spec
+     * Specifies the data used to update the listener.
+     */
+&nbsp;
+    function editListener(id, spec) {
+      return apiService.put('/api/lbaas/listeners/' + id + '/', spec)
+        .error(function () {
+          toastService.add('error', gettext('Unable to update listener.'));
+        });
+    }
+&nbsp;
+    /**
+     * @name horizon.app.core.openstack-service-api.lbaasv2.deleteListener
+     * @description
+     * Delete a single listener by ID
+     * @param {string} id
+     * @param {boolean} quiet
+     * Specifies the id of the listener to delete.
+     */
+&nbsp;
+    function deleteListener(id, quiet) {
+      var promise = apiService.delete('/api/lbaas/listeners/' + id + '/');
+      return quiet ? promise : promise.error(function () {
+        toastService.add('error', gettext('Unable to delete listener.'));
+      });
+    }
+&nbsp;
+    // Pools
+&nbsp;
+    /**
+     * @name horizon.app.core.openstack-service-api.lbaasv2.getPool
+     * @description
+     * Get a single Pool by ID.
+     * @param {string} id
+     * Specifies the id of the pool to request.
+     * @param {boolean} includeChildResources
+     * If truthy, all child resources below the pool will be included in the response.
+     */
+&nbsp;
+    function getPool(id, includeChildResources) {
+      var params = includeChildResources
+          ? {params: {includeChildResources: includeChildResources}}
+          : {};
+      return apiService.get('/api/lbaas/pools/' + id + '/', params)
+        .error(function () {
+          toastService.add('error', gettext('Unable to retrieve pool.'));
+        });
+    }
+&nbsp;
+    /**
+     * @name horizon.app.core.openstack-service-api.lbaasv2.createPool
+     * @description
+     * Create a new pool
+     * @param {object} spec
+     * Specifies the data used to create the new pool.
+     */
+&nbsp;
+    function createPool(spec) {
+      return apiService.post('/api/lbaas/pools/', spec)
+        .error(function () {
+          toastService.add('error', gettext('Unable to create pool.'));
+        });
+    }
+&nbsp;
+    /**
+     * @name horizon.app.core.openstack-service-api.lbaasv2.editPool
+     * @description
+     * Edit a pool
+     * @param {string} id
+     * Specifies the id of the pool to update.
+     * @param {object} spec
+     * Specifies the data used to update the pool.
+     */
+&nbsp;
+    function editPool(id, spec) {
+      return apiService.put('/api/lbaas/pools/' + id + '/', spec)
+        .error(function () {
+          toastService.add('error', gettext('Unable to update pool.'));
+        });
+    }
+&nbsp;
+    /**
+     * @name horizon.app.core.openstack-service-api.lbaasv2.deletePool
+     * @description
+     * Delete a single pool by ID
+     * @param {string} id
+     * @param {boolean} quiet
+     * Specifies the id of the pool to delete.
+     */
+&nbsp;
+    function deletePool(id, quiet) {
+      var promise = apiService.delete('/api/lbaas/pools/' + id + '/');
+      return quiet ? promise : promise.error(function () {
+        toastService.add('error', gettext('Unable to delete pool.'));
+      });
+    }
+&nbsp;
+    // Members
+&nbsp;
+    /**
+     * @name horizon.app.core.openstack-service-api.lbaasv2.getMembers
+     * @description
+     * Get a list of members.
+     * @param {string} poolId
+     * Specifies the id of the pool the members belong to.
+     *
+     * The listing result is an object with property "items". Each item is
+     * a member.
+     */
+&nbsp;
+    function getMembers(poolId) {
+      return apiService.get('/api/lbaas/pools/' + poolId + '/members/')
+        .error(function () {
+          toastService.add('error', gettext('Unable to retrieve members.'));
+        });
+    }
+&nbsp;
+    /**
+     * @name horizon.app.core.openstack-service-api.lbaasv2.getMember
+     * @description
+     * Get a single pool Member by ID.
+     * @param {string} poolId
+     * Specifies the id of the pool the member belongs to.
+     * @param {string} memberId
+     * Specifies the id of the member to request.
+     */
+&nbsp;
+    function getMember(poolId, memberId) {
+      return apiService.get('/api/lbaas/pools/' + poolId + '/members/' + memberId + '/')
+        .error(function () {
+          toastService.add('error', gettext('Unable to retrieve member.'));
+        });
+    }
+&nbsp;
+    /**
+     * @name horizon.app.core.openstack-service-api.lbaasv2.editMember
+     * @description
+     * Edit a pool member.
+     * @param {string} id
+     * Specifies the id of the member to update.
+     * @param {object} spec
+     * Specifies the data used to update the member.
+     */
+&nbsp;
+    function editMember(poolId, memberId, spec) {
+      return apiService.put('/api/lbaas/pools/' + poolId + '/members/' + memberId + '/', spec)
+        .error(function () {
+          toastService.add('error', gettext('Unable to update member.'));
+        });
+    }
+&nbsp;
+    /**
+     * @name horizon.app.core.openstack-service-api.lbaasv2.updateMemberList
+     * @description
+     * Update the list of pool members by adding or removing the necessary members.
+     * @param {string} poolId
+     * Specifies the id of the pool the members belong to.
+     * @param {object} spec
+     * Specifies the data used to update the member list.
+     */
+&nbsp;
+    function updateMemberList(poolId, spec) {
+      return apiService.put('/api/lbaas/pools/' + poolId + '/members/', spec)
+        .error(function () {
+          toastService.add('error', gettext('Unable to update member list.'));
+        });
+    }
+&nbsp;
+    // Health Monitors
+&nbsp;
+    /**
+     * @name horizon.app.core.openstack-service-api.lbaasv2.getHealthMonitor
+     * @description
+     * Get a single pool health monitor by ID.
+     * @param {string} monitorId
+     * Specifies the id of the health monitor.
+     */
+&nbsp;
+    function getHealthMonitor(monitorId) {
+      return apiService.get('/api/lbaas/healthmonitors/' + monitorId + '/')
+        .error(function () {
+          toastService.add('error', gettext('Unable to retrieve health monitor.'));
+        });
+    }
+&nbsp;
+    /**
+     * @name horizon.app.core.openstack-service-api.lbaasv2.editHealthMonitor
+     * @description
+     * Edit a health monitor
+     * @param {string} id
+     * Specifies the id of the health monitor to update.
+     * @param {object} spec
+     * Specifies the data used to update the health monitor.
+     */
+&nbsp;
+    function editHealthMonitor(id, spec) {
+      return apiService.put('/api/lbaas/healthmonitors/' + id + '/', spec)
+        .error(function () {
+          toastService.add('error', gettext('Unable to update health monitor.'));
+        });
+    }
+&nbsp;
+    /**
+     * @name horizon.app.core.openstack-service-api.lbaasv2.deleteHealthMonitor
+     * @description
+     * Delete a single health monitor by ID
+     * @param {string} id
+     * @param {boolean} quiet
+     * Specifies the id of the health monitor to delete.
+     */
+&nbsp;
+    function deleteHealthMonitor(id, quiet) {
+      var promise = apiService.delete('/api/lbaas/healthmonitors/' + id + '/');
+      return quiet ? promise : promise.error(function () {
+        toastService.add('error', gettext('Unable to delete health monitor.'));
+      });
+    }
+&nbsp;
+    /**
+     * @name horizon.app.core.openstack-service-api.lbaasv2.createHealthMonitor
+     * @description
+     * Create a new health monitor
+     * @param {object} spec
+     * Specifies the data used to create the new health monitor.
+     */
+&nbsp;
+    function createHealthMonitor(spec) {
+      return apiService.post('/api/lbaas/healthmonitors/', spec)
+        .error(function () {
+          toastService.add('error', gettext('Unable to create health monitor.'));
+        });
+    }
+&nbsp;
+  }
+}());
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Sep 29 2018 16:06:31 GMT+0000 (Coordinated Universal Time)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>
