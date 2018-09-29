@@ -9,10 +9,10 @@ app.service("author", function() {
 
 app.controller('myCtrl', ctl);
 ctl.$inject = [
-    '$scope', '$q', '$filter', '$interval', '$http', '$timeout', 'author'
+    '$scope', '$q', '$location', '$interval', '$http', '$timeout', 'author'
 ];
 
-function ctl($scope, $q, $filter, $interval, $http, $timeout, author) {
+function ctl($scope, $q, $location, $interval, $http, $timeout, author) {
     $scope.timeoutInfo = '';
     var wait = 100;
     var panelDefText = "Move Over the Fox.";
@@ -100,4 +100,37 @@ function ctl($scope, $q, $filter, $interval, $http, $timeout, author) {
     $scope.mouseLeavePng = function() {
         $scope.panelInfo = panelDefText;
     };
+
+    // About Multiple Promises: $q.all([])
+    // All promises in $q.all would be executed in parallel.
+    $scope.urls = [
+        "angularjs.jpg",
+        'batarang.jpg',
+        'chrome.jpg',
+        'html.jpg',
+        'vscode.jpg',
+        'squid3.jpg',
+        'nginx.jpg'
+    ];
+
+    $scope.checkReadiness = function() {        
+        var promises = [];
+        angular.forEach($scope.urls, function(url) {
+            promises.push($http({
+                method: "GET",
+                url: $location.absUrl() + url
+            }));
+        });
+
+        $q.all(promises).then(
+            function(result) {
+                $scope.srcReady = true;
+            },
+            function(reason) {
+                // use batalang, we can set breakpoint here to check reason object.
+                console.log("" + angular.toJson(reason));
+                $scope.srcReady = false;
+            }  
+        );
+    }
 }

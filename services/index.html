@@ -14,8 +14,17 @@
                 <img ng-src="{{pngSource}}"
                     ng-mouseenter="mouseEnterPng()"
                     ng-mouseleave="mouseLeavePng()"/><br>
-                {{panelInfo}}
+                {{panelInfo}}<br><br>
+
+                <button ng-click="checkReadiness()"> Load Ohter Pictures </button>
             </p>
+
+            <div ng-if="srcReady" align="center">
+                <img ng-repeat="url in urls" ng-src="{{url}}" 
+                    style="width:100px; height:100px"
+                    />
+                    
+            </div>
         </div>
     </body>
 </html>
