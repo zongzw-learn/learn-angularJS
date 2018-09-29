@@ -25,13 +25,16 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, author) {
     // $timeout service: corresponding to JS window.setTimeout function.
     $timeout(function() {
         $scope.timeoutInfo = author.author() + 
-                " remind you, this page idles for more than " + wait + " seconds";
+                " reminds you, this page idles for more than " + wait + " seconds";
     }, wait * 1000);
 
-    $scope.pngSource = "http://foxfox.mybluemix.net/metamask.png";
+    $scope.pngSource = "http://foxfox.mychinabluemix.net/metamask.png";
     $scope.panelInfo = panelDefText;
     $scope.calTimes = 0;
-
+    $scope.selectChanged = function() {
+        console.log("current selection: " + $scope.pngSource);
+    };
+    
     $scope.mouseEnterPng = function() {
         /**
          * Understand Promise Chain:
@@ -105,9 +108,9 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, author) {
     // All promises in $q.all would be executed in parallel.
     $scope.urls = [
         "angularjs.jpg",
+        'html.jpg',
         'batarang.jpg',
         'chrome.jpg',
-        'html.jpg',
         'vscode.jpg',
         'squid3.jpg',
         'nginx.jpg'
@@ -118,6 +121,7 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, author) {
         angular.forEach($scope.urls, function(url) {
             promises.push($http({
                 method: "GET",
+                // $location service to get information about location(url/path/port/..)
                 url: $location.absUrl() + url
             }));
         });

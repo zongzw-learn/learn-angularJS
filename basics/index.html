@@ -50,12 +50,15 @@
         <script>
             var app = angular.module("myApp", ['angular-md5', 'angular-sha1']);  // inject other module in the [] 
 
-            // define service via service()
+            // define service via service recipe
             app.service("base64Service", function() {
                 this.base64 = function(x) {
-                    // new an instance of service Base64. It's defined within the same module by default.
+                    // new an instance of service Base64.
+                    // It's defined within the same module by default.
                     return new Base64().encode(x);
                 };
+
+                // return this // by default
             });
 
             // define controller with injecting dependencies implicitly from function parameters[not recommended]
@@ -63,12 +66,12 @@
             app.controller("myCtrl", function($scope, $filter, base64Service, md5, sha1) { // inject services. 
                 $scope.myString = '';
 
-                // the way to use filter in controller.
+                // the way to use filter service in controller.
                 $scope.lowerString = function() {
                     return $filter('lowercase')($scope.myString);  // the $filter service usage.
                 };
 
-                // function is defined
+                // function is defined.
                 $scope.calStringMd5 = function() {
                     return md5.createHash($scope.myString);
                 };
