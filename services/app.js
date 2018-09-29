@@ -122,6 +122,7 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, author) {
             }));
         });
 
+        // the combined promise would fail(call error function) when one of the promises fails.
         $q.all(promises).then(
             function(result) {
                 $scope.srcReady = true;
