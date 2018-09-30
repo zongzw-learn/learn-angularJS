@@ -22,6 +22,7 @@ webroot=/path/to/learn-angularJS
 >Note that, 
 * it depends on docker to run the script. 
 * change other settings in `/path/to/nginx-80-443/settings` if needs: like `http_port`.
+4. access `http://localhost:<your-port>`
 
 # Demostrating Points
 
