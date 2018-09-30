@@ -6,16 +6,14 @@
     </head>
 
     <body ng-app="myApp">
-        <div ng-controller="myCtrl" align="center">
+        <div ng-controller="myCtrl" align="center" ng-mousemove="beCareful()">
             <br><br>
             Current Time: {{curtime}} <br><br>
             {{timeoutInfo}} <br><br>
             <br><br>
 
             <div align="center">
-                <div style="width:200px; height:200px" 
-                    ng-mouseenter="mouseEnterPng()"
-                    ng-mouseleave="mouseLeavePng()"
+                <div style="width:200px; height:200px"
                     id="logo-container"></div>
                 <span><i>from metamask</i></span><br><br>
                 <br>{{panelInfo}}<br><br>

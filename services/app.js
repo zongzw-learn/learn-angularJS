@@ -17,6 +17,7 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, author) {
     var wait = 100;
     var panelDefText = "Move Over the Fox.";
     var mouseEvent;
+    var centerLogo;
 
     var elem = window.document.getElementById('logo-container')
 
@@ -33,37 +34,30 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, author) {
 
     $scope.pngSource = "http://foxfox.mychinabluemix.net/metamask.png";
     $scope.panelInfo = panelDefText;
-    $scope.calTimes = 0;
-    $scope.selectChanged = function() {
-        console.log("current selection: " + $scope.pngSource);
-    };
     
-    $scope.mouseEnterPng = function() {
+    $scope.beCareful = function() {
         /**
          * Understand Promise Chain:
          *
-         * if you want to make the promise chain, the former functions(getPngFromUrl, calPngSize)
+         * if you want to make the promise chain, the former functions(mousePosition, checkSafety)
          * MUST return a promise.
-         * Otherwise, no matter the former function succeed or error, later success function
-         * would always be called(here is success).
+         * Otherwise, no matter the former function succeed or warnSafe, later inforSafe function
+         * would always be called.
          *
          * However, if a regular value instead of promise be returned by intermediate function,
          * the later function can still be called with the return.
          *
-         * By the way, error function and notifying function are optional to .then()
+         * By the way, warnSafe function and notifying function are optional to .then()
         */
-        getPngFromUrl()
-            .then(calPngSize, function(reason) {$scope.panelInfo = "Error: " + reason;})
-            .then(success, error);
+        mousePosition()
+            .then(checkSafety)
+            .then(inforSafe, warnSafe);
     }
 
-    function getPngFromUrl() {
+    function mousePosition() {
         var deferred = $q.defer();
 
-        if (!mouseEvent){
-            mouseEvent = window.event;
-        }
-   
+        mouseEvent = window.event;
         var result = {};
         if (mouseEvent.pageX || mouseEvent.pageY){
             result.x = mouseEvent.pageX;
@@ -71,37 +65,48 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, author) {
         }
 
         deferred.resolve(result);
-
         return deferred.promise;
     }
 
     // See "Understand Promise Chain: " for why I comment this function.
-    //function calPngSize(pngContext) {
-    //    console.log("calPngSize .. " + angular.toJson(pngContext));
+    //function checkSafety(pngContext) {
+    //    console.log("checkSafety .. " + angular.toJson(pngContext));
     //    return pngContext.data.length;
     //}
-    // Recoding the calPngSize with promise.
-    function calPngSize(position) {
+    // Recoding the checkSafety with promise.
+    function checkSafety(position) {
+        //console.log("position: " + angular.toJson(position));
         var deferred = $q.defer();
 
-        console.log("(" + position.x + ", " + position.y + ")");
-        var container = elem.getBoundingClientRect();
-        console.log("elem: " + elem + ":" + container);
+        if(!centerLogo) {
+            var container = elem.getBoundingClientRect();
+            centerLogo = {
+                x: container.x + container.width/2,
+                y: container.y + container.height/2
+            };
+            console.log("elem: " + elem + ":" + angular.toJson(container));
+        }
         
+        var dis = 200;
+        var absX = position.x - centerLogo.x;
+        var absY = position.y - centerLogo.y;
+        var close = absX*absX + absY*absY - dis*dis;
+        if (close > 0) {
+            deferred.resolve("Safe!");
+        } else {
+            deferred.reject("Dangerous!");
+        }
+
         return deferred.promise;
     }
 
-    function success(result) {
-        $scope.panelInfo = 'Info: ' + result;
+    function inforSafe(result) {
+        $scope.panelInfo = 'Info: You are ' + result;
     }
 
-    function error(reason) {
-        $scope.panelInfo = "Warning: " + reason;
+    function warnSafe(reason) {
+        $scope.panelInfo = "Warning: Too close, " + reason;
     }
-
-    $scope.mouseLeavePng = function() {
-        $scope.panelInfo = panelDefText;
-    };
 
     // About Multiple Promises: $q.all([])
     // All promises in $q.all would be executed in parallel.
@@ -128,10 +133,10 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, author) {
                  *
                  * $http have 2 subsequent functions, like:
                  *  $http({method: 'GET', url: "http://xxx.yy"})
-                 *      .success(function(result) {})
-                 *      .error(function(reason) {});
+                 *      .inforSafe(function(result) {})
+                 *      .warnSafe(function(reason) {});
                  * But we should not use it for later versions make them deprecated.
-                 * Use .then(sucess, error) instead.
+                 * Use .then(sucess, warnSafe) instead.
                 */
                 $http({
                     method: "GET",
@@ -140,7 +145,7 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, author) {
             }));
         });
 
-        // the combined promise would fail(call error function) when one of the promises fails.
+        // the combined promise would fail(call warnSafe function) when one of the promises fails.
         $q.all(promises).then(
             function(result) {
                 $scope.srcReady = true;
