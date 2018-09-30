@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset=UTF-8>
         <script src="https://code.angularjs.org/1.4.6/angular.min.js"></script>
         <script src="app.js"></script>
     </head>
 
     <body ng-app="myApp">
-        <div ng-controller="myCtrl" align="center" ng-mousemove="beCareful()">
+        <div ng-controller="myCtrl" align="center" ng-mousemove="beCareful($event)">
             <br><br>
             Current Time: {{curtime}} <br><br>
             {{timeoutInfo}} <br><br>

@@ -14,7 +14,7 @@ ctl.$inject = [
 
 function ctl($scope, $q, $location, $interval, $http, $timeout, author) {
     $scope.timeoutInfo = '';
-    var wait = 100;
+    var wait = 30;
     var panelDefText = "Move Over the Fox.";
     var mouseEvent;
     var centerLogo;
@@ -35,7 +35,7 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, author) {
     $scope.pngSource = "http://foxfox.mychinabluemix.net/metamask.png";
     $scope.panelInfo = panelDefText;
     
-    $scope.beCareful = function() {
+    $scope.beCareful = function(event) {
         /**
          * Understand Promise Chain:
          *
@@ -49,15 +49,16 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, author) {
          *
          * By the way, warnSafe function and notifying function are optional to .then()
         */
-        mousePosition()
+        mousePosition(event)
             .then(checkSafety)
             .then(inforSafe, warnSafe);
     }
 
-    function mousePosition() {
+    function mousePosition(event) {
         var deferred = $q.defer();
 
-        mouseEvent = window.event;
+        // window.event is not available on all browser, so use event passed from event trigger.
+        mouseEvent = event || window.event;
         var result = {};
         if (mouseEvent.pageX || mouseEvent.pageY){
             result.x = mouseEvent.pageX;

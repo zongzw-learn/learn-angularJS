@@ -2,9 +2,8 @@
 
 This is the repo for demonstrating basic concepts/usage of angularJS, also as a summary of first impression to angularJS.
 
-The repo depends on 2 other repos: 
+The repo depends on the following repos:
 * https://github.com/zongzw/nginx-80-443: used as a webserver to run angularjs based web application.
-* https://github.com/zongzw/foxfox: this bluemix application has been deployed, so just use it.
 
 # Deploy and Run
 1. git clone the two repo to local
@@ -27,7 +26,9 @@ webroot=/path/to/learn-angularJS
 # Demostrating Points
 
 ## basics
-Focus on the basic concepts and usages in angularJS.
+The sample code accepts an input and timely show its uppercase, lowercase, base64, md5 and sha1 values.
+
+It focuses on demostrating the basic concepts and usages in angularJS.
 * how to write the module, the controller, and apply them in html: **myApp myCtrl** 
 * how to define a css style: **panel**
 * how and where to place **script**
@@ -39,7 +40,9 @@ Focus on the basic concepts and usages in angularJS.
 * basic ng directive usages: **ng-model, ng-app, ng-controller, ng-style**
 
 ## services
-Focus on the kinds of common services.
+The sample code show current time, a string(30s later), animated fox and several logos.
+
+It focuses on demonstrating the kinds of common services.
 * **$scope**: the bridge between DOM and controller.
 * **$q**: the promise to make task executed in asynchronizing way.
 * **$location**: helper to handler http location(url port path or so.).
