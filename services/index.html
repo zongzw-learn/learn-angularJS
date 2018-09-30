@@ -6,13 +6,14 @@
     </head>
 
     <body ng-app="myApp">
-        <div ng-controller="myCtrl">
+        <div ng-controller="myCtrl" align="center">
+            <br><br>
             Current Time: {{curtime}} <br><br>
             {{timeoutInfo}} <br><br>
             <br><br>
             <p style="text-align: Center;">
-                Select Source URL: 
                 <!--just do a select, still not binding to reload from source yet.
+                Select Source URL:
                 <select ng-model="pngSource" ng-change="selectChanged()"> 
                     <option value="http://foxfox.mychinabluemix.net/metamask.png">ChinaBluemix</option>
                     <option value="http://foxfox.mybluemix.net/metamask.png">Bluemix</option>
@@ -25,7 +26,7 @@
                 <button ng-click="checkReadiness()"> showThanksTo </button>
             </p>
 
-            <div ng-if="srcReady" align="center">
+            <div ng-if="srcReady">
                 <img ng-repeat="url in urls" ng-src="{{url}}" 
                     style="width:100px; height:100px"/>
             </div>
