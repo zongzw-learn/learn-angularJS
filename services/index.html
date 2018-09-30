@@ -12,17 +12,17 @@
             <br><br>
             <p style="text-align: Center;">
                 Select Source URL: 
-                <!--just do a select, still not binding to reload from source yet.-->
+                <!--just do a select, still not binding to reload from source yet.
                 <select ng-model="pngSource" ng-change="selectChanged()"> 
                     <option value="http://foxfox.mychinabluemix.net/metamask.png">ChinaBluemix</option>
                     <option value="http://foxfox.mybluemix.net/metamask.png">Bluemix</option>
-                </select><br>
+                </select><br>-->
                 <img ng-src="{{pngSource}}"
                     ng-mouseenter="mouseEnterPng()"
                     ng-mouseleave="mouseLeavePng()"/><br>
                 {{panelInfo}}<br><br>
 
-                <button ng-click="checkReadiness()"> Load Other Pictures </button>
+                <button ng-click="checkReadiness()"> showThanksTo </button>
             </p>
 
             <div ng-if="srcReady" align="center">
