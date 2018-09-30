@@ -11,20 +11,16 @@
             Current Time: {{curtime}} <br><br>
             {{timeoutInfo}} <br><br>
             <br><br>
-            <p style="text-align: Center;">
-                <!--just do a select, still not binding to reload from source yet.
-                Select Source URL:
-                <select ng-model="pngSource" ng-change="selectChanged()"> 
-                    <option value="http://foxfox.mychinabluemix.net/metamask.png">ChinaBluemix</option>
-                    <option value="http://foxfox.mybluemix.net/metamask.png">Bluemix</option>
-                </select><br>-->
-                <img ng-src="{{pngSource}}"
-                    ng-mouseenter="mouseEnterPng()"
-                    ng-mouseleave="mouseLeavePng()"/><br>
-                {{panelInfo}}<br><br>
 
-                <button ng-click="checkReadiness()"> showThanksTo </button>
-            </p>
+            <div align="center">
+                <div style="width:200px; height:200px" 
+                    ng-mouseenter="mouseEnterPng()"
+                    ng-mouseleave="mouseLeavePng()"
+                    id="logo-container"></div>
+                <span><i>from metamask</i></span><br><br>
+                <br>{{panelInfo}}<br><br>
+                <button ng-click="checkReadiness()"> <h3>showThanksTo</h3> </button><br><br>
+            </div>
 
             <div ng-if="srcReady">
                 <img ng-repeat="url in urls" ng-src="{{url}}" 
@@ -32,4 +28,6 @@
             </div>
         </div>
     </body>
+
+    <script src="bundle.js"></script>
 </html>

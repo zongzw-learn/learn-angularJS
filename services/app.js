@@ -16,6 +16,9 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, author) {
     $scope.timeoutInfo = '';
     var wait = 100;
     var panelDefText = "Move Over the Fox.";
+    var mouseEvent;
+
+    var elem = window.document.getElementById('logo-container')
 
     // $interval service: corresponding to JS window.setInterval function.
     $interval(function() {
@@ -39,9 +42,9 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, author) {
         /**
          * Understand Promise Chain:
          *
-         * if you want to make the promise chain, the intermediate function(here is calPngSize)
+         * if you want to make the promise chain, the former functions(getPngFromUrl, calPngSize)
          * MUST return a promise.
-         * Otherwise, no matter the intermediate function succeed or error, later success function
+         * Otherwise, no matter the former function succeed or error, later success function
          * would always be called(here is success).
          *
          * However, if a regular value instead of promise be returned by intermediate function,
@@ -55,22 +58,21 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, author) {
     }
 
     function getPngFromUrl() {
-        /**
-         * Understand Promise:
-         *
-         * $http would return the promise, which would be executed in caller's context.
-         *
-         * $http have 2 subsequent functions, like:
-         *  $http({method: 'GET', url: "http://xxx.yy"})
-         *      .success(function(result) {})
-         *      .error(function(reason) {});
-         * But we should not use it for later versions make them deprecated.
-         * Use .then(sucess, error) instead.
-         * */
-        return $http({
-            method: 'GET',
-            url: $scope.pngSource
-        });
+        var deferred = $q.defer();
+
+        if (!mouseEvent){
+            mouseEvent = window.event;
+        }
+   
+        var result = {};
+        if (mouseEvent.pageX || mouseEvent.pageY){
+            result.x = mouseEvent.pageX;
+            result.y = mouseEvent.pageY;
+        }
+
+        deferred.resolve(result);
+
+        return deferred.promise;
     }
 
     // See "Understand Promise Chain: " for why I comment this function.
@@ -79,16 +81,13 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, author) {
     //    return pngContext.data.length;
     //}
     // Recoding the calPngSize with promise.
-    function calPngSize(pngContext) {
-        $scope.calTimes += 1;
+    function calPngSize(position) {
         var deferred = $q.defer();
 
-        if($scope.calTimes > 3) {
-            deferred.reject("Duplicate Calculation: " + pngContext.data.length);
-        } else {
-            deferred.resolve("Size: " + pngContext.data.length);
-        }
-
+        console.log("(" + position.x + ", " + position.y + ")");
+        var container = elem.getBoundingClientRect();
+        console.log("elem: " + elem + ":" + container);
+        
         return deferred.promise;
     }
 
@@ -114,15 +113,30 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, author) {
         'vscode.jpg',
         'squid3.jpg',
         'nginx.jpg'
-    ];
+    ].map(function(item){
+        return "thanksto/" + item;
+    });
 
     $scope.checkReadiness = function() {        
         var promises = [];
         angular.forEach($scope.urls, function(url) {
-            promises.push($http({
-                method: "GET",
-                // $location service to get information about location(url/path/port/..)
-                url: $location.absUrl() + url
+            promises.push(
+                /**
+                 * About $http
+                 * 
+                 * $http would return the promise, which would be executed in caller's context.
+                 *
+                 * $http have 2 subsequent functions, like:
+                 *  $http({method: 'GET', url: "http://xxx.yy"})
+                 *      .success(function(result) {})
+                 *      .error(function(reason) {});
+                 * But we should not use it for later versions make them deprecated.
+                 * Use .then(sucess, error) instead.
+                */
+                $http({
+                    method: "GET",
+                    // $location service to get information about location(url/path/port/..)
+                    url: $location.absUrl() + url
             }));
         });
 
