@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset=UTF-8>
-        <script src="https://code.angularjs.org/1.4.6/angular.min.js"></script>
+        <script src="https://code.angularjs.org/1.4.9/angular.min.js"></script>
         <script src="app.js"></script>
     </head>
 
@@ -22,7 +22,8 @@
             </div>
 
             <div ng-if="srcReady">
-                <img ng-repeat="url in urls" ng-src="{{url}}" 
+                <!--<img ng-repeat="data in thanksImgData" ng-src="{{data}}"-->
+                <img type="image/jpeg" ng-repeat="url in thanksImgUrl" ng-src="{{url}}"
                     style="width:100px; height:100px"/>
             </div>
         </div>

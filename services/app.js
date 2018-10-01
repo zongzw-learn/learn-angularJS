@@ -9,10 +9,10 @@ app.service("author", function() {
 
 app.controller('myCtrl', ctl);
 ctl.$inject = [
-    '$scope', '$q', '$location', '$interval', '$http', '$timeout', 'author'
+    '$scope', '$q', '$location', '$interval', '$http', '$timeout', '$window', 'author'
 ];
 
-function ctl($scope, $q, $location, $interval, $http, $timeout, author) {
+function ctl($scope, $q, $location, $interval, $http, $timeout, $window, author) {
     $scope.timeoutInfo = '';
     var wait = 30;
     var panelDefText = "Move Over the Fox.";
@@ -34,7 +34,9 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, author) {
 
     $scope.pngSource = "http://foxfox.mychinabluemix.net/metamask.png";
     $scope.panelInfo = panelDefText;
-    
+    $scope.thanksImgData = [];
+    $scope.thanksImgUrl = [];
+
     $scope.beCareful = function(event) {
         /**
          * Understand Promise Chain:
@@ -112,13 +114,13 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, author) {
     // About Multiple Promises: $q.all([])
     // All promises in $q.all would be executed in parallel.
     $scope.urls = [
-        "angularjs.jpg",
+        "angularjs.jpg"/*,
         'html.jpg',
         'batarang.jpg',
         'chrome.jpg',
         'vscode.jpg',
         'squid3.jpg',
-        'nginx.jpg'
+        'nginx.jpg'*/
     ].map(function(item){
         return "thanksto/" + item;
     });
@@ -150,6 +152,23 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, author) {
         $q.all(promises).then(
             function(result) {
                 $scope.srcReady = true;
+                angular.forEach(result, function(rlt) {
+                    console.log("added");
+                    $scope.thanksImgData.push(rlt.data);
+                    console.log("length:" + rlt.data.length);
+                    var urlService = $window.URL || $window.webkitURL;
+                    console.log(urlService);
+                    console.log(urlService.createObjectURL);
+                    var byteArray = new Uint8Array(rlt.data);
+                    var len = rlt.data.length, u8_array = new Uint8Array(len);
+                    for (var i = 0; i < len; i++) {
+                        u8_array[i] = rlt.data.charCodeAt(i);
+                    }
+                    var blob = new Blob([u8_array], {type: 'image/jpeg'});
+                    var url = urlService.createObjectURL(blob);
+                    console.log("created url: " + url);
+                    $scope.thanksImgUrl.push(url);
+                });
             },
             function(reason) {
                 // use batalang, we can set breakpoint here to check reason object.

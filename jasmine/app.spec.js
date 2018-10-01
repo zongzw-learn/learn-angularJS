@@ -6,8 +6,8 @@
             var deferred = $q.defer();
             deferred[httpOK ? 'resolve' : 'reject']({data: 'data'});
             return deferred.promise;
-    
         }
+        
         beforeEach(module('myApp'));
         beforeEach(inject(function($injector, $controller){
             $q = $injector.get('$q');
