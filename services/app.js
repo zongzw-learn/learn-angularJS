@@ -20,6 +20,7 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, $window, author)
     var centerLogo;
 
     var elem = window.document.getElementById('logo-container')
+    var urlService = $window.URL || $window.webkitURL;
 
     // $interval service: corresponding to JS window.setInterval function.
     $interval(function() {
@@ -34,8 +35,7 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, $window, author)
 
     $scope.pngSource = "http://foxfox.mychinabluemix.net/metamask.png";
     $scope.panelInfo = panelDefText;
-    $scope.thanksImgData = [];
-    $scope.thanksImgUrl = [];
+    $scope.thanksImageUrls = [];
 
     $scope.beCareful = function(event) {
         /**
@@ -60,11 +60,11 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, $window, author)
         var deferred = $q.defer();
 
         // window.event is not available on all browser, so use event passed from event trigger.
-        mouseEvent = event || window.event;
+        event = event;
         var result = {};
-        if (mouseEvent.pageX || mouseEvent.pageY){
-            result.x = mouseEvent.pageX;
-            result.y = mouseEvent.pageY;
+        if (event.pageX || event.pageY){
+            result.x = event.pageX;
+            result.y = event.pageY;
         }
 
         deferred.resolve(result);
@@ -114,13 +114,13 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, $window, author)
     // About Multiple Promises: $q.all([])
     // All promises in $q.all would be executed in parallel.
     $scope.urls = [
-        "angularjs.jpg"/*,
+        "angularjs.jpg",
         'html.jpg',
         'batarang.jpg',
         'chrome.jpg',
         'vscode.jpg',
         'squid3.jpg',
-        'nginx.jpg'*/
+        'nginx.jpg'
     ].map(function(item){
         return "thanksto/" + item;
     });
@@ -144,31 +144,23 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, $window, author)
                 $http({
                     method: "GET",
                     // $location service to get information about location(url/path/port/..)
-                    url: $location.absUrl() + url
+                    url: $location.absUrl() + url,
+                    responseType: 'arraybuffer' // to put the retrieved data in arraybuffer.
             }));
         });
 
         // the combined promise would fail(call warnSafe function) when one of the promises fails.
         $q.all(promises).then(
+            // when all promises are executed with success, they would be created with links.
             function(result) {
-                $scope.srcReady = true;
+                $scope.thanksImageUrls = [];
                 angular.forEach(result, function(rlt) {
-                    console.log("added");
-                    $scope.thanksImgData.push(rlt.data);
-                    console.log("length:" + rlt.data.length);
-                    var urlService = $window.URL || $window.webkitURL;
-                    console.log(urlService);
-                    console.log(urlService.createObjectURL);
-                    var byteArray = new Uint8Array(rlt.data);
-                    var len = rlt.data.length, u8_array = new Uint8Array(len);
-                    for (var i = 0; i < len; i++) {
-                        u8_array[i] = rlt.data.charCodeAt(i);
-                    }
-                    var blob = new Blob([u8_array], {type: 'image/jpeg'});
+                    var blob = new Blob([rlt.data], {type: 'image/jpeg'});
                     var url = urlService.createObjectURL(blob);
-                    console.log("created url: " + url);
-                    $scope.thanksImgUrl.push(url);
+                    $scope.thanksImageUrls.push(url);
                 });
+
+                $scope.srcReady = true;
             },
             function(reason) {
                 // use batalang, we can set breakpoint here to check reason object.
