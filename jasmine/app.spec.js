@@ -7,7 +7,7 @@
             deferred[httpOK ? 'resolve' : 'reject']({data: 'data'});
             return deferred.promise;
         }
-        
+
         beforeEach(module('myApp'));
         beforeEach(inject(function($injector, $controller){
             $q = $injector.get('$q');
@@ -23,6 +23,7 @@
     
         it('size should be set', function() {
             $scope.action();
+            $scope.$apply();
             expect($scope.size).toBe(4);
         });
     });
