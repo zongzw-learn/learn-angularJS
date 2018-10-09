@@ -42,15 +42,14 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, $window) {
 
         var tx = event.pageX - rect.width/2;
         var ty = event.pageY - rect.height/2;
-        sx = rect.left// + rect.width/2;
-        sy = rect.top// + rect.height/2;
+        sx = rect.left;
+        sy = rect.top;
 
         var per = 0;
         $interval(
             function() {
                 if(catched || per >= 100) {
-                    $interval.cancel();
-                    console.log("stop moving.")
+                    $interval.cancel(); // cannot stop.. issue..
                     return
                 }
 
