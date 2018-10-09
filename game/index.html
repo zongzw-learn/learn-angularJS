@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset=UTF-8>
+        <script src="https://code.angularjs.org/1.4.9/angular.min.js"></script>
+        <script src="app.js"></script>
+        <style>
+            .outer {
+                display: table;
+                position: absolute;
+                height: 100%;
+                width: 100%;
+                background:beige;
+            }
+
+            .middle {
+                display: table-cell;
+                border: 2px solid green;
+                vertical-align: middle;
+                text-align: center;
+            }
+
+            .inner {
+                margin-left: auto;
+                margin-right: auto;
+
+                /*whatever width you want*/
+            }
+        </style>
+    </head>
+
+    <body ng-app="myApp">
+        
+        <div ng-controller="myCtrl" class="outer">
+                <div class="middle" ng-dblclick="autoMove($event)" 
+                    ng-mousemove="move($event)">
+                  <div class="inner">
+                        <img id="imgid" ng-src="{{pngSource}}" 
+                            ng-mouseup="catch($event)"
+                            style="width:100px; height:90px;">
+                        </img>
+                  </div>
+                </div>
+              </div>
+    </body>
+
+</html>

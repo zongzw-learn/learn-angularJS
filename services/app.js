@@ -114,13 +114,15 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, $window, author)
     // About Multiple Promises: $q.all([])
     // All promises in $q.all would be executed in parallel.
     $scope.urls = [
-        "angularjs.jpg",
-        'html.jpg',
+        'nginx.jpg',
+        'docker.jpg',
+        'firefox.jpg',
         'batarang.jpg',
+        "angularjs.jpg",
         'chrome.jpg',
+        'html.jpg',
         'vscode.jpg',
-        'squid3.jpg',
-        'nginx.jpg'
+        'squid3.jpg'
     ].map(function(item){
         return "thanksto/" + item;
     });
