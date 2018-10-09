@@ -42,8 +42,8 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, $window) {
 
         var tx = event.pageX - rect.width/2;
         var ty = event.pageY - rect.height/2;
-        sx = rect.left + rect.width/2;
-        sy = rect.top + rect.height/2;
+        sx = rect.left// + rect.width/2;
+        sy = rect.top// + rect.height/2;
 
         var per = 0;
         $interval(
@@ -61,8 +61,8 @@ function ctl($scope, $q, $location, $interval, $http, $timeout, $window) {
                 elem.setAttribute("style", 
                     "width:100px; height:90px; " 
                     + "position:absolute; " 
-                    + "left:"+ (cx - rect.width/2)  + "px; "
-                    + "top:" + (cy - rect.height/2) + "px");
+                    + "left:"+ (cx)  + "px; "
+                    + "top:" + (cy) + "px");
             },
             30
         )
