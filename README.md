@@ -53,9 +53,22 @@ It focuses on demonstrating the kinds of common services.
 
 ## jasmine
 **Jasmine** is a framework provided in angularJS world for UnitTest. While **karma** is a tool to automate the testing process. Lots of articles can be found online to describe the usages of them.
-This repo just demonstrates
+
+This folder aims to demonstrates
 * how to **setup and run and report**. 
 * usage of **module**, **inject**, **provide**, **$injector**, **$controller**.
 * basic references to mock: **spyOn**, **expect.toXX**. 
 
 > Note that: the **setup and run and report** depends on docker environment.
+
+## game
+**game** is a simple web-based implementation, which once opened, you can
+* move the fox by clicking it(catch) and clicking it again(release) at another point; 
+* double click a place, the fox will move automatically to there.
+
+This game demonstrates the flexibility of angularJS that it can even be used to implement a webbrowser-based game.
+
+In the implementation, it
+* defines the css style to make the area for fox.
+* adds kinds of events in html.
+* utilizes more functionalities of $event.
