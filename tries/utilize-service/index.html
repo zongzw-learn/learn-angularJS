@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+
+    <body ng-app="myApp">
+        <div ng-controller="myCtrl as ctrl">
+            <br>
+            <!--本程序用于演示 如何调用自定义服务的方法-->
+            value: {{actions}} <br>
+            call : {{actions()}} <br>
+        </div>
+
+        <script src="https://code.angularjs.org/1.4.6/angular.min.js"></script>
+        <script src="app.js"></script>
+
+    </body>
+</html>
